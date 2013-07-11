@@ -91,7 +91,7 @@ endfunction
 
 augroup bundler_utility
   autocmd!
-  autocmd User Bundler call s:define_commands()
+  autocmd User BBundler call s:define_commands()
 augroup END
 
 let s:abstract_prototype = {}
@@ -180,7 +180,7 @@ function! s:Detect(path)
     endif
   endif
   if exists('b:bundler_root')
-    silent doautocmd User Bundler
+    silent doautocmd User BBundler
   endif
 endfunction
 
@@ -422,7 +422,7 @@ endfunction
 call s:add_methods('buffer',['getvar','setvar','project'])
 
 " }}}1
-" Bundle {{{1
+" BBundle {{{1
 
 function! s:push_chdir()
   if !exists("s:command_stack") | let s:command_stack = [] | endif
@@ -437,7 +437,7 @@ function! s:pop_command()
   endif
 endfunction
 
-function! s:Bundle(bang,arg)
+function! s:BBundle(bang,arg)
   let old_makeprg = &l:makeprg
   let old_errorformat = &l:errorformat
   let old_compiler = get(b:, 'current_compiler', '')
@@ -459,7 +459,7 @@ function! s:Bundle(bang,arg)
   endtry
 endfunction
 
-function! s:BundleComplete(A,L,P)
+function! s:BBundleComplete(A,L,P)
   if a:L =~# '^\S\+\s\+\%(show\|update\) '
     return s:completion_filter(keys(s:project().paths()),a:A)
   endif
@@ -470,7 +470,7 @@ function! s:SetupMake() abort
   compiler bundler
 endfunction
 
-call s:command("-bar -bang -nargs=? -complete=customlist,s:BundleComplete Bundle :execute s:Bundle('<bang>',<q-args>)")
+call s:command("-bar -bang -nargs=? -complete=customlist,s:BBundleComplete BBundle :execute s:BBundle('<bang>',<q-args>)")
 
 function! s:IsBundlerProject()
   return &makeprg =~# '^bundle' && exists('b:bundler_root')
@@ -586,7 +586,7 @@ call s:add_methods('project',['alter_buffer_paths'])
 
 augroup bundler_path
   autocmd!
-  autocmd User Bundler call s:buffer().alter_paths()
+  autocmd User BBundler call s:buffer().alter_paths()
 augroup END
 
 " }}}1
